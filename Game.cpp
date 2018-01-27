@@ -159,14 +159,14 @@ std::vector<size_t> Game::containsValue(int v) const
         }
         return cards_with_value;
 }
-
-std::vector<size_t> Game::checkvalue(int v) {
-        std::vector<size_t> remaining_cells;
-        for (size_t ca = 0; ca < this->getSize(); ca++) {
-
-        }
-}
-
+//
+// std::vector<size_t> Game::checkvalue(int v) {
+//         std::vector<size_t> remaining_cells;
+//         for (size_t ca = 0; ca < this->getSize(); ca++) {
+//
+//         }
+// }
+//
 
 
 // size_t Card::uncheckvalue(int v)

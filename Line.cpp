@@ -22,7 +22,7 @@ Line::~Line()
 
 }
 
-bool Line::islinefull()
+bool Line::islinefull() const
 {
         return this->isfull;
 }
@@ -130,6 +130,22 @@ std::vector<int> Line::getValues() const
 
         return v;
 }
+
+Line& Line::operator=(const Line old)
+{
+        std::vector<Cell*> c;
+        std::vector<int> v = old.getValues();
+        for (size_t i = 0; i < old.getSize(); i++) {
+                c.push_back(new Cell(old.getCell(i)->getValue(), old.getCell(i)->ischecked()));
+        }
+
+        this->line = c;
+        this->isfull = old.islinefull();
+        this->line_size = old.getSize();
+
+        return *this;
+}
+
 
 void Line::printLine(std::ostream &os) const
 {

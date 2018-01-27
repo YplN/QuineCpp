@@ -16,7 +16,7 @@ public:
 Line(std::vector<int> v);
 ~Line();
 
-bool islinefull();
+bool islinefull() const;
 void setfull(bool b);
 size_t getSize() const;
 Cell* getCell(size_t i) const;
@@ -27,6 +27,7 @@ bool uncheckvalue(int v);
 bool reverse_checkvalue(int v);
 std::vector<int> getValues() const;
 
+Line& operator=(const Line old);
 
 void printLine(std::ostream &os) const;
 };

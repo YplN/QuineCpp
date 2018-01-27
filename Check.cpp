@@ -32,40 +32,47 @@ std::ostream& operator<<(std::ostream &os, Game const& G)
         return os;
 }
 
-Line operator+(Line & L, Cell const& C)
+
+
+
+Line operator+(Line &L, Cell const& C)
 {
         std::vector<int> v = L.getValues();
 
-        std::cout<<v<<std::endl;
+        // std::cout<<v<<std::endl;
         if(L.containsValue(C.getValue())==-1)
         {
                 bool after = true;
                 v.push_back(C.getValue());
-                std::cout<<v<<std::endl;
+                // std::cout<<v<<std::endl;
                 Line L1 = Line(v);
-                for (size_t i = 0; i < L1.getSize(); i++) {
-                        if(L1.getCell(i)->getValue()==C.getValue())
-                        {
-                                after = false;
-                                if(C.ischecked())
-                                        L1.getCell(i)->check();
-                        }
-                        else
-                        {
-                                if(after)
-                                {
-                                        if(L.getCell(i)->ischecked())
-                                                L1.getCell(i)->check();
-                                }
-                                else
-                                {
-                                        if(L.getCell(i-1)->ischecked())
-                                                L1.getCell(i)->check();
-                                }
-                        }
-                        std::cout<<*L1.getCell(i)<<std::endl;
+                std::cout<<L1<<std::endl;
 
-                }
+                // for (size_t i = 0; i < L1.getSize(); i++) {
+                //         if(L1.getCell(i)->getValue()==C.getValue())
+                //         {
+                //                 after = false;
+                //                 if(C.ischecked())
+                //                         L1.getCell(i)->check();
+                //         }
+                //         else
+                //         {
+                //                 if(after)
+                //                 {
+                //                         if(L.getCell(i)->ischecked())
+                //                                 L1.getCell(i)->check();
+                //                 }
+                //                 else
+                //                 {
+                //                         if(L.getCell(i-1)->ischecked())
+                //                                 L1.getCell(i)->check();
+                //                 }
+                //         }
+                //         std::cout<<*L1.getCell(i)<<std::endl;
+                //
+                // }
+                //
+                // std::cout<<"Hey ! "<<std::endl;
                 return L1;
         }
 
@@ -129,13 +136,33 @@ std::vector<std::vector<std::vector<int> > > Parser(std::string filename)
 
 int main()
 {
-        std::vector<std::vector<std::vector<int> > > g = Parser("input2.txt");
-        Game G(g, true);
-        std::cout<<G<<std::endl;
+        // std::vector<std::vector<std::vector<int> > > g = Parser("input2.txt");
+        // Game G(g, true);
+        // std::cout<<G<<std::endl;
 
-        for (size_t i = 0; i < G.containsValue(5).size(); i++) {
-                std::cout<<G.containsValue(5).at(i)<<std::endl;
-        }
+
+        //
+        // for (size_t i = 0; i < G.containsValue(99).size(); i++) {
+        //         std::cout<<G.containsValue(99).at(i)<<std::endl;
+        // }
+
+        Cell C(3);
+        std::vector<int> v;
+        v.push_back(2);
+        v.push_back(7);
+
+        Line L(v);
+
+        Line L2 = L;
+        std::cout<<L<<std::endl;
+        std::cout<<L2<<std::endl<<std::endl;
+
+        std::cout<<L.getCell(0)<<std::endl;
+        std::cout<<L2.getCell(0)<<std::endl<<std::endl;
+
+        L2.checkvalue(2);
+        std::cout<<L<<std::endl;
+        std::cout<<L2<<std::endl<<std::endl;
 
         return 0;
 }
