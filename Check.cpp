@@ -1,5 +1,12 @@
 #include "Cell.h"
 #include "Line.h"
+#include "Card.h"
+#include "Game.h"
+
+#include <fstream>
+#include <sstream>
+#include <string>
+
 
 std::ostream& operator<<(std::ostream &os, Cell const& C)
 {
@@ -10,6 +17,18 @@ std::ostream& operator<<(std::ostream &os, Cell const& C)
 std::ostream& operator<<(std::ostream &os, Line const& L)
 {
         L.printLine(os);
+        return os;
+}
+
+std::ostream& operator<<(std::ostream &os, Card const& C)
+{
+        C.printCard(os);
+        return os;
+}
+
+std::ostream& operator<<(std::ostream &os, Game const& G)
+{
+        G.printGame(os);
         return os;
 }
 
@@ -60,28 +79,63 @@ Line operator+(Line & L, Cell const& C)
         return L;
 }
 
+std::vector<std::vector<std::vector<int> > > Parser(std::string filename)
+{
+        std::ifstream in(filename, std::ifstream::in);
+        size_t nb_cards, nb_lines, id_card;
+        std::string val, line;
+        std::vector<std::vector<std::vector<int> > > game;
+        std::vector<std::vector<int> > card;
+        std::vector<int> one_line;
 
+//The first item is the number of cards in total
+        in>>nb_cards;
+        in.ignore(1,'\n');
+        // std::cout<<"CARDS : "<<nb_cards<<std::endl;
+
+        for (size_t ca = 0; ca < nb_cards; ca++) {
+                std::getline(in, line);
+                std::istringstream iss (line);
+
+                iss>>nb_lines;
+                // std::cout<<nb_lines<<std::endl;
+                iss>>id_card;
+                // std::cout<<"ID:"<<id_card<<std::endl;
+
+                card.push_back(std::vector<int>(1, id_card));
+                for (size_t li = 0; li < nb_lines; li++) {
+
+                        std::getline(in, line);
+                        std::istringstream iss(line);
+
+                        // size_t i = 0;
+                        while (std::getline(iss,val,' ')) {
+                                one_line.push_back(stoi(val));
+                                // std::cout<<i<<"("<<val<<")";
+                                // i++;
+                        }
+                        // std::cout<<std::endl;
+
+                        card.push_back(one_line);
+                        one_line.clear();
+                }
+
+                in.ignore(1,'\n');
+                game.push_back(card);
+                card.clear();
+        }
+        return game;
+}
 
 int main()
 {
-        Cell C(3);
-        std::vector<int> v;
-        v.push_back(23);
-        v.push_back(42);
-        v.push_back(14);
-        v.push_back(9);
-        v.push_back(4);
-        v.push_back(84);
+        std::vector<std::vector<std::vector<int> > > g = Parser("input2.txt");
+        Game G(g, true);
+        std::cout<<G<<std::endl;
 
-        Line L(v);
-        std::cout<<L<<std::endl;
-
-        v.insert(v.begin()+4, 5);
-
-        Line L2(v);
-
-        std::cout<<L2<<std::endl;
-        std::cout<<L2+C<<std::endl;
+        for (size_t i = 0; i < G.containsValue(5).size(); i++) {
+                std::cout<<G.containsValue(5).at(i)<<std::endl;
+        }
 
         return 0;
 }

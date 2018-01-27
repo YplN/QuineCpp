@@ -10,6 +10,7 @@ Line::Line(std::vector<int> v)
                 this->line.push_back(new Cell(v.at(i)));
         }
         this->line_size = v.size();
+        this->isfull = false;
 }
 Line::~Line()
 {
@@ -64,13 +65,17 @@ int Line::containsValue(int v) const
 
 bool Line::checkvalue(int v) {
         int is_in = this->containsValue(v);
-        if(is_in > 0)
+        if(is_in >= 0)
         {
                 this->line.at(is_in)->check();
                 size_t i = 0;
                 while (i<this->line.size() && this->line.at(i)->ischecked())
                         i++;
 
+                // if(i==this->line.size())
+                //         std::cout<<"Hey!"<<std::endl;
+                // else
+                //         std::cout<<"Ho!"<<std::endl;
                 this->isfull = (i==this->line.size());
                 return this->isfull;
 
@@ -84,7 +89,7 @@ bool Line::checkvalue(int v) {
 bool Line::uncheckvalue(int v)
 {
         int is_in = this->containsValue(v);
-        if(is_in > 0)
+        if(is_in >= 0)
         {
                 this->line.at(is_in)->uncheck();
                 this->isfull = false;
@@ -97,7 +102,7 @@ bool Line::uncheckvalue(int v)
 bool Line::reverse_checkvalue(int v)
 {
         int is_in = this->containsValue(v);
-        if(is_in > 0)
+        if(is_in >= 0)
         {
                 this->line.at(is_in)->reverse_check();
                 if(this->line.at(is_in) == false)
@@ -132,4 +137,6 @@ void Line::printLine(std::ostream &os) const
                 this->line.at(i)->printcell(os);
                 os<<" ";
         }
+        if(this->isfull)
+                os<<" <";
 }
