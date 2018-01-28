@@ -20,6 +20,7 @@ Game(std::vector<std::vector<std::vector<int> > > v, bool b);
 ~Game();
 
 size_t getSize() const;
+size_t getMin() const;
 Line* getLine(size_t ca, size_t l) const;
 Cell* getCell(size_t ca, size_t l, size_t ce) const;
 Card* getCard(size_t ca) const;
@@ -28,7 +29,8 @@ std::vector<size_t> containsValue(int v) const;
 std::vector<size_t> checkvalue(int v);
 std::vector<size_t> uncheckvalue(int v);
 std::vector<size_t> reverse_checkvalue(int v);
-std::vector<std::vector<int> > getValues() const;
+std::vector<std::vector<std::vector<int> > > getValues() const;
+std::vector<size_t> getAllMin() const;
 
 void printGame(std::ostream &os) const;
 };

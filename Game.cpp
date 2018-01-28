@@ -48,8 +48,6 @@ Game::Game(std::vector<std::vector<std::vector<int> > > v)
 
 Game::Game(std::vector<std::vector<std::vector<int> > > v, bool b)
 {
-
-        // bool isfull = true;
         size_t min_c, line, tmp;
         std::vector<size_t> id_min;
 
@@ -64,17 +62,15 @@ Game::Game(std::vector<std::vector<std::vector<int> > > v, bool b)
                 while(l<v.at(ca).size())
                 {
                         line+=v.at(ca).at(l).size();
-                        // std::cout<<v.at(ca).at(l)<<std::endl;
                         std::sort(v.at(ca).at(l).begin(), v.at(ca).at(l).end());
                         l++;
                 }
                 tmp = min_c;
                 min_c = line<min_c ? line : min_c;
                 if(tmp!=min_c)
-                        id_min.erase(id_min.begin(), id_min.end());
+                        id_min.clear();
                 else
                         id_min.push_back(l);
-
                 ca++;
         }
 
@@ -85,8 +81,6 @@ Game::Game(std::vector<std::vector<std::vector<int> > > v, bool b)
                 this->game.push_back(new Card(v.at(i), b));
         }
 
-        // this->card_size = v.size();
-        // this->isfull = isfull;
 }
 
 Game::~Game()
@@ -98,15 +92,20 @@ Game::~Game()
         }
 
 }
-//
-// bool Card::iscardfull()
-// {
-//         return this->isfull;
-// }
 
 size_t Game::getSize() const
 {
         return this->game.size();
+}
+
+size_t Game::getMin() const
+{
+        return this->min_card;
+}
+
+std::vector<size_t> Game::getAllMin() const
+{
+        return this->id_min;
 }
 //
 // size_t Card::getRValues() const
@@ -159,84 +158,87 @@ std::vector<size_t> Game::containsValue(int v) const
         }
         return cards_with_value;
 }
-//
-// std::vector<size_t> Game::checkvalue(int v) {
-//         std::vector<size_t> remaining_cells;
-//         for (size_t ca = 0; ca < this->getSize(); ca++) {
-//
-//         }
-// }
-//
+
+std::vector<size_t> Game::checkvalue(int v) {
+        std::vector<size_t> nb_remaining_cells_on_each_card;
+        size_t min_val = this->getMin();
+        size_t rc;
+
+        for (size_t ca = 0; ca < this->getSize(); ca++) {
+                this->getCard(ca)->checkvalue(v);
+                rc = this->getCard(ca)->getRValues();
+                if(rc<min_val)
+                {
+                        this->id_min.clear();
+                        min_val = rc;
+                }
+
+                if(rc<=min_val)
+                {
+                        this->id_min.push_back(ca);
+                }
+
+                nb_remaining_cells_on_each_card.push_back(rc);
+        }
+        return nb_remaining_cells_on_each_card;
+}
 
 
-// size_t Card::uncheckvalue(int v)
-// {
-//         int is_in_line = this->containsValue(v);
-//         if(is_in_line >= 0)
-//         {
-//                 int is_in = this->getLine(is_in_line)->containsValue(v);
-//                 if(this->getCell(is_in_line, is_in)->ischecked())
-//                 {
-//                         this->getLine(is_in_line)->uncheckvalue(v);
-//                         this->nb_values_left++;
-//                         this->isfull = false;
-//                 }
-//                 return this->nb_values_left;
-//         }
-//         else
-//                 return this->nb_values_left;
-// }
-//
-// size_t Card::reverse_checkvalue(int v)
-// {
-//         int is_in_line = this->containsValue(v);
-//         if(is_in_line >= 0)
-//         {
-//
-//                 int is_in = this->getLine(is_in_line)->containsValue(v);
-//                 if(this->getCell(is_in_line, is_in)->ischecked())
-//                 {
-//                         this->getLine(is_in_line)->uncheckvalue(v);
-//                         this->nb_values_left++;
-//                 }
-//                 else
-//                 {
-//                         this->getLine(is_in_line)->checkvalue(v);
-//                         this->nb_values_left--;
-//                 }
-//
-//
-//                 // if(this->getLine(is_in_line)->islinefull() == false)
-//                 // {
-//                 //         this->nb_values_left++;
-//                 //         return false;
-//                 // }
-//                 //
-//                 // this->nb_values_left--;
-//
-//                 // size_t i = 0;
-//                 // while (i<this->card->getSize() && this->card->getLine(i)->ischecked())
-//                 //         i++;
-//
-//                 this->isfull = (this->nb_values_left == 0);
-//                 return this->nb_values_left;
-//
-//         }
-//         else
-//                 return this->nb_values_left;
-// }
-//
-//
-// std::vector<std::vector<int> > Card::getValues() const
-// {
-//         std::vector<std::vector<int> > v;
-//         for (size_t i = 0; i < this->getSize(); i++) {
-//                 v.push_back(this->getLine(i)->getValues());
-//         }
-//
-//         return v;
-// }
-//
+std::vector<size_t> Game::uncheckvalue(int v) {
+        std::vector<size_t> nb_remaining_cells_on_each_card;
+        size_t min_val = this->getMin();
+        size_t rc;
+        for (size_t ca = 0; ca < this->getSize(); ca++) {
+                this->getCard(ca)->uncheckvalue(v);
+                rc = this->getCard(ca)->getRValues();
+                if(rc<min_val)
+                {
+                        this->id_min.clear();
+                        min_val = rc;
+                }
+
+                if(rc<=min_val)
+                {
+                        this->id_min.push_back(ca);
+                }
+                nb_remaining_cells_on_each_card.push_back(this->getCard(ca)->getRValues());
+        }
+        return nb_remaining_cells_on_each_card;
+}
+
+std::vector<size_t> Game::reverse_checkvalue(int v) {
+        std::vector<size_t> nb_remaining_cells_on_each_card;
+        size_t min_val = this->getMin();
+        size_t rc;
+        for (size_t ca = 0; ca < this->getSize(); ca++) {
+                this->getCard(ca)->reverse_checkvalue(v);
+                rc = this->getCard(ca)->getRValues();
+                if(rc<min_val)
+                {
+                        this->id_min.clear();
+                        min_val = rc;
+                }
+
+                if(rc<=min_val)
+                {
+                        this->id_min.push_back(ca);
+                }
+                nb_remaining_cells_on_each_card.push_back(this->getCard(ca)->getRValues());
+        }
+        return nb_remaining_cells_on_each_card;
+}
+
+
+std::vector<std::vector<std::vector<int> > > Game::getValues() const
+{
+        std::vector<std::vector<std::vector<int> > > v;
+        for (size_t i = 0; i < this->getSize(); i++) {
+                v.push_back(this->getCard(i)->getValues());
+        }
+
+        return v;
+}
+
 void Game::printGame(std::ostream &os) const
 {
         for (size_t i = 0; i < this->getSize(); i++) {

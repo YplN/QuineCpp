@@ -23,7 +23,23 @@ Line::~Line()
 }
 
 Line::Line(const Line& old){
-  std::cout<<"fuckoff"<<std::endl;
+        std::vector<Cell*> c;
+        std::vector<int> v = old.getValues();
+
+        for (size_t i = 0; i < old.getSize(); i++) {
+                c.push_back(new Cell(old.getCell(i)->getValue(), old.getCell(i)->ischecked()));
+        }
+
+        while(!this->line.empty())
+        {
+                delete this->line.back();
+                this->line.pop_back();
+        }
+
+        this->line = c;
+        this->isfull = old.islinefull();
+        this->line_size = old.getSize();
+
 }
 
 bool Line::islinefull() const
@@ -137,29 +153,29 @@ std::vector<int> Line::getValues() const
 
 Line& Line::operator=(const Line& old)
 {
-  if(&old == this){
-    std::cout<<"same"<<std::endl;
-    return *this;
-  }
+        if(&old == this) {
+                std::cout<<"same"<<std::endl;
+                return *this;
+        }
 
-  std::cout<<"Coucou?"<<std::endl;
+        std::cout<<"Coucou?"<<std::endl;
 
-  std::vector<Cell*> c;
-  std::vector<int> v = old.getValues();
+        std::vector<Cell*> c;
+        std::vector<int> v = old.getValues();
 
-  for (size_t i = 0; i < old.getSize(); i++) {
-    Cell ce(old.getCell(i)->getValue(), old.getCell(i)->ischecked());
-    // std::cout<<"Euuh..."<<std::endl;
-    // c.push_back(new Cell(old.getCell(i)->getValue(), old.getCell(i)->ischecked()));
-    ce.printcell(std::cout);
-    c.push_back(&ce);
-  }
+        for (size_t i = 0; i < old.getSize(); i++) {
+                Cell ce(old.getCell(i)->getValue(), old.getCell(i)->ischecked());
+                // std::cout<<"Euuh..."<<std::endl;
+                // c.push_back(new Cell(old.getCell(i)->getValue(), old.getCell(i)->ischecked()));
+                ce.printcell(std::cout);
+                c.push_back(&ce);
+        }
 
-  this->line = c;
-  this->isfull = old.islinefull();
-  this->line_size = old.getSize();
+        this->line = c;
+        this->isfull = old.islinefull();
+        this->line_size = old.getSize();
 
-  return *this;
+        return *this;
 }
 
 
