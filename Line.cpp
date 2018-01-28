@@ -133,10 +133,20 @@ std::vector<int> Line::getValues() const
 
 Line& Line::operator=(const Line old)
 {
+        if(&old == this)
+                return *this;
+
+        std::cout<<"Coucou?"<<std::endl;
+
         std::vector<Cell*> c;
         std::vector<int> v = old.getValues();
+
         for (size_t i = 0; i < old.getSize(); i++) {
-                c.push_back(new Cell(old.getCell(i)->getValue(), old.getCell(i)->ischecked()));
+                Cell ce(old.getCell(i)->getValue(), old.getCell(i)->ischecked());
+                // std::cout<<"Euuh..."<<std::endl;
+                // c.push_back(new Cell(old.getCell(i)->getValue(), old.getCell(i)->ischecked()));
+                ce.printcell(std::cout);
+                c.push_back(&ce);
         }
 
         this->line = c;
