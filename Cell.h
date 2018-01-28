@@ -23,4 +23,7 @@ void printcell(std::ostream &os) const;
 
 };
 
+
+std::ostream& operator<<(std::ostream &os, Cell const& C);
+
 #endif

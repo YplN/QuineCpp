@@ -250,3 +250,10 @@ void Card::printCard(std::ostream &os) const
                 os<<std::endl;
         }
 }
+
+
+std::ostream& operator<<(std::ostream &os, Card const& C)
+{
+        C.printCard(os);
+        return os;
+}

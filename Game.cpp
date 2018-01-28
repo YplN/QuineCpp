@@ -245,3 +245,9 @@ void Game::printGame(std::ostream &os) const
                 os<<std::endl;
         }
 }
+
+std::ostream& operator<<(std::ostream &os, Game const& G)
+{
+        G.printGame(os);
+        return os;
+}

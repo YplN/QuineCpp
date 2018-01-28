@@ -33,3 +33,12 @@ void Cell::printcell(std::ostream &os) const
         else
                 os<<"X)";
 }
+
+
+
+std::ostream& operator<<(std::ostream &os, Cell const& C)
+{
+        C.printcell(os);
+        return os;
+
+}

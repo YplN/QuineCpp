@@ -33,4 +33,7 @@ std::vector<std::vector<int> > getValues() const;
 void printGame(std::ostream &os) const;
 };
 
+
+std::ostream& operator<<(std::ostream &os, Game const& G);
+
 #endif

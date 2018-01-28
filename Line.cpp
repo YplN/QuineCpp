@@ -22,6 +22,10 @@ Line::~Line()
 
 }
 
+Line::Line(const Line& old){
+  std::cout<<"fuckoff"<<std::endl;
+}
+
 bool Line::islinefull() const
 {
         return this->isfull;
@@ -131,29 +135,31 @@ std::vector<int> Line::getValues() const
         return v;
 }
 
-Line& Line::operator=(const Line old)
+Line& Line::operator=(const Line& old)
 {
-        if(&old == this)
-                return *this;
+  if(&old == this){
+    std::cout<<"same"<<std::endl;
+    return *this;
+  }
 
-        std::cout<<"Coucou?"<<std::endl;
+  std::cout<<"Coucou?"<<std::endl;
 
-        std::vector<Cell*> c;
-        std::vector<int> v = old.getValues();
+  std::vector<Cell*> c;
+  std::vector<int> v = old.getValues();
 
-        for (size_t i = 0; i < old.getSize(); i++) {
-                Cell ce(old.getCell(i)->getValue(), old.getCell(i)->ischecked());
-                // std::cout<<"Euuh..."<<std::endl;
-                // c.push_back(new Cell(old.getCell(i)->getValue(), old.getCell(i)->ischecked()));
-                ce.printcell(std::cout);
-                c.push_back(&ce);
-        }
+  for (size_t i = 0; i < old.getSize(); i++) {
+    Cell ce(old.getCell(i)->getValue(), old.getCell(i)->ischecked());
+    // std::cout<<"Euuh..."<<std::endl;
+    // c.push_back(new Cell(old.getCell(i)->getValue(), old.getCell(i)->ischecked()));
+    ce.printcell(std::cout);
+    c.push_back(&ce);
+  }
 
-        this->line = c;
-        this->isfull = old.islinefull();
-        this->line_size = old.getSize();
+  this->line = c;
+  this->isfull = old.islinefull();
+  this->line_size = old.getSize();
 
-        return *this;
+  return *this;
 }
 
 
@@ -165,4 +171,11 @@ void Line::printLine(std::ostream &os) const
         }
         if(this->isfull)
                 os<<" <";
+}
+
+
+std::ostream& operator<<(std::ostream &os, Line const& L)
+{
+        L.printLine(os);
+        return os;
 }

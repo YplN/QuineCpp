@@ -38,4 +38,6 @@ std::vector<std::vector<int> > getValues() const;
 void printCard(std::ostream &os) const;
 };
 
+
+std::ostream& operator<<(std::ostream &os, Card const& C);
 #endif

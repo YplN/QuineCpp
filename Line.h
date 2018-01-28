@@ -15,6 +15,7 @@ size_t line_size;
 public:
 Line(std::vector<int> v);
 ~Line();
+Line(const Line& old);
 
 bool islinefull() const;
 void setfull(bool b);
@@ -27,9 +28,11 @@ bool uncheckvalue(int v);
 bool reverse_checkvalue(int v);
 std::vector<int> getValues() const;
 
-Line& operator=(const Line old);
+Line& operator=(const Line& old);
 
 void printLine(std::ostream &os) const;
 };
+
+std::ostream& operator<<(std::ostream &os, Line const& L);
 
 #endif
